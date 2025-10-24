@@ -42,9 +42,9 @@ export function Chat() {
     // tạo body type-safe & validate bằng Zod
     let body: QaRequest;
     try {
-      body = QaRequestSchema.parse({ message: text });
+      body = QaRequestSchema.parse({ question: text });
     } catch (err: any) {
-      const errMsg = err?.errors?.[0]?.message ?? String(err);
+      const errMsg = err?.errors?.[0]?.question?? String(err);
       setMessages((m) => [
         ...m,
         { role: "assistant", content: `Validation Error: ${errMsg}` },
@@ -78,64 +78,56 @@ export function Chat() {
   }
 
   return (
-    <div className="max-w-3xl mx-auto p-4 flex flex-col h-[80vh]">
-      <div className="border rounded-md p-4 mb-4 flex-1 overflow-auto flex flex-col gap-3">
-        {messages.length === 0 ? (
-          <div className="text-sm text-muted-foreground">
-            No messages yet. Ask something about the project.
-          </div>
-        ) : (
-          messages.map((m, i) => (
+  <div className="flex flex-col h-[80vh] w-full max-w-3xl bg-white/80 backdrop-blur-md border border-[#BBDEFB]/60 rounded-2xl shadow-md p-5">
+    {/* Nội dung hội thoại */}
+    <div className="flex-1 overflow-auto space-y-3 mb-4 p-2">
+      {messages.length === 0 ? (
+        <div className="text-center text-gray-500 text-sm mt-10">
+          💬 Chưa có tin nhắn nào. Hãy nhập câu hỏi để bắt đầu.
+        </div>
+      ) : (
+        messages.map((m, i) => (
+          <div
+            key={i}
+            className={`flex ${
+              m.role === "user" ? "justify-end" : "justify-start"
+            }`}
+          >
             <div
-              key={i}
-              className={`self-${m.role === "user" ? "end" : "start"} ${
-                m.role === "user" ? "bg-slate-200" : "bg-slate-100"
-              } p-2 rounded max-w-[70%]`}
+              className={`p-3 rounded-2xl max-w-[75%] text-sm leading-relaxed shadow-sm ${
+                m.role === "user"
+                  ? "bg-[#1E88E5] text-white rounded-br-none"
+                  : "bg-[#FFF9C4] text-gray-800 rounded-bl-none"
+              }`}
             >
-              {m.isMarkdown ? (
-                <ReactMarkdown
-                  remarkPlugins={[remarkGfm, remarkBreaks]}
-                  components={{
-                    ol: ({ node, ...props }) => (
-                      <ol className="list-decimal ml-6" {...props} />
-                    ),
-                    ul: ({ node, ...props }) => (
-                      <ul className="list-disc ml-6" {...props} />
-                    ),
-                  }}
-                >
-                  {m.content}
-                </ReactMarkdown>
-              ) : (
-                <div className="text-sm">{m.content}</div>
-              )}
+              {m.content}
             </div>
-          ))
-        )}
-        <div ref={chatEndRef} />
-      </div>
-
-      <div className="flex gap-2">
-        <input
-          className="flex-1 border rounded p-2"
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") send();
-          }}
-          placeholder={
-            externalUrl ? `Sending to ${externalUrl}` : "Type your question..."
-          }
-          disabled={loading}
-        />
-        <button
-          className="px-4 py-2 bg-primary text-white rounded disabled:opacity-50"
-          onClick={send}
-          disabled={loading}
-        >
-          {loading ? "..." : "Send"}
-        </button>
-      </div>
+          </div>
+        ))
+      )}
+      <div ref={chatEndRef} />
     </div>
+
+    {/* Ô nhập chat */}
+    <div className="flex items-center gap-2 mt-auto">
+      <input
+        className="flex-1 bg-white border border-gray-300 rounded-full px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1E88E5]"
+        value={input}
+        onChange={(e) => setInput(e.target.value)}
+        onKeyDown={(e) => e.key === 'Enter' && send()}
+        placeholder="Nhập câu hỏi..."
+        disabled={loading}
+      />
+      <button
+        className="w-10 h-10 flex items-center justify-center rounded-full bg-[#1E88E5] hover:bg-[#1565C0] text-white transition disabled:opacity-50"
+        onClick={send}
+        disabled={loading}
+      >
+        {loading ? <span className="animate-spin">⏳</span> : <span>➤</span>}
+      </button>
+    </div>
+  </div>
+
+
   );
 }
