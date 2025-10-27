@@ -1,9 +1,7 @@
 "use client";
 import React, { useState, useRef, useEffect } from "react";
-import ReactMarkdown from "react-markdown";
 import chatApiRequest from "@/apiRequests/chat";
-import remarkGfm from "remark-gfm";
-import remarkBreaks from "remark-breaks";
+import MarkdownMessage from "./MarkdownMessage";
 
 import {
   QaRequest,
@@ -44,7 +42,7 @@ export function Chat() {
     try {
       body = QaRequestSchema.parse({ question: text });
     } catch (err: any) {
-      const errMsg = err?.errors?.[0]?.question?? String(err);
+      const errMsg = err?.errors?.[0]?.question ?? String(err);
       setMessages((m) => [
         ...m,
         { role: "assistant", content: `Validation Error: ${errMsg}` },
@@ -78,56 +76,60 @@ export function Chat() {
   }
 
   return (
-  <div className="flex flex-col h-[80vh] w-full max-w-3xl bg-white/80 backdrop-blur-md border border-[#BBDEFB]/60 rounded-2xl shadow-md p-5">
-    {/* Nội dung hội thoại */}
-    <div className="flex-1 overflow-auto space-y-3 mb-4 p-2">
-      {messages.length === 0 ? (
-        <div className="text-center text-gray-500 text-sm mt-10">
-          💬 Chưa có tin nhắn nào. Hãy nhập câu hỏi để bắt đầu.
-        </div>
-      ) : (
-        messages.map((m, i) => (
-          <div
-            key={i}
-            className={`flex ${
-              m.role === "user" ? "justify-end" : "justify-start"
-            }`}
-          >
+    <div className="h-full max-h-[95vh] flex flex-col w-full max-w-3xl ">
+      {/* Nội dung hội thoại */}
+      <div className="flex-1 overflow-auto space-y-3 mb-2 mt-6 p-2">
+        {messages.length === 0 ? (
+          <h1 className="text-4xl font-extrabold text-center mb-2 drop-shadow-sm">
+            <span className="bg-gradient-to-r from-[#1565C0] to-[#FFD740] text-transparent bg-clip-text">
+              Hello! Where should we begin?
+            </span>
+          </h1>
+        ) : (
+          messages.map((m, i) => (
             <div
-              className={`p-3 rounded-2xl max-w-[75%] text-sm leading-relaxed shadow-sm ${
-                m.role === "user"
-                  ? "bg-[#1E88E5] text-white rounded-br-none"
-                  : "bg-[#FFF9C4] text-gray-800 rounded-bl-none"
+              key={i}
+              className={`flex ${
+                m.role === "user" ? "justify-end" : "justify-start"
               }`}
             >
-              {m.content}
+              <div
+                className={`p-3 rounded-2xl max-w-[75%] text-sm leading-relaxed shadow-sm ${
+                  m.role === "user"
+                    ? "bg-[#1E88E5] text-white rounded-br-none"
+                    : "bg-[#FFF9C4] text-gray-800 rounded-bl-none"
+                }`}
+              >
+                {m.isMarkdown ? (
+                  <MarkdownMessage content={m.content} />
+                ) : (
+                  m.content
+                )}
+              </div>
             </div>
-          </div>
-        ))
-      )}
-      <div ref={chatEndRef} />
+          ))
+        )}
+        <div ref={chatEndRef} />
+      </div>
+
+      {/* Ô nhập chat */}
+      <div className="flex items-center mb-4 gap-2 mt-auto">
+        <input
+          className="flex-1 bg-white border border-gray-300 rounded-full px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1E88E5]"
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          onKeyDown={(e) => e.key === "Enter" && send()}
+          placeholder="Nhập câu hỏi..."
+          disabled={loading}
+        />
+        <button
+          className="w-10 h-10 flex items-center justify-center rounded-full bg-[#1E88E5] hover:bg-[#1565C0] text-white transition disabled:opacity-50"
+          onClick={send}
+          disabled={loading}
+        >
+          {loading ? <span className="animate-spin">⏳</span> : <span>➤</span>}
+        </button>
+      </div>
     </div>
-
-    {/* Ô nhập chat */}
-    <div className="flex items-center gap-2 mt-auto">
-      <input
-        className="flex-1 bg-white border border-gray-300 rounded-full px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1E88E5]"
-        value={input}
-        onChange={(e) => setInput(e.target.value)}
-        onKeyDown={(e) => e.key === 'Enter' && send()}
-        placeholder="Nhập câu hỏi..."
-        disabled={loading}
-      />
-      <button
-        className="w-10 h-10 flex items-center justify-center rounded-full bg-[#1E88E5] hover:bg-[#1565C0] text-white transition disabled:opacity-50"
-        onClick={send}
-        disabled={loading}
-      >
-        {loading ? <span className="animate-spin">⏳</span> : <span>➤</span>}
-      </button>
-    </div>
-  </div>
-
-
   );
 }

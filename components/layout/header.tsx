@@ -6,11 +6,7 @@ import Link from "next/link";
 export default function Header() {
   return (
     <header className="w-full bg-white shadow-md border-b border-gray-200 p-4 flex items-center justify-between">
-  <div className="flex pl-20 items-center gap-2">
-    <Image src={logo} alt="Logo" width={130} height={150} className="object-contain" />
-  </div>
-
-       {/* Search + Buttons */}
+      {/* Search + Buttons */}
       <div className="flex items-center gap-4">
         <input
           type="text"
