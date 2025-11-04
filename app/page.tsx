@@ -1,13 +1,14 @@
+import Sidebar from "@/components/Sidebar/sidebar";
+import SearchBox from "@/components/SearchBox/searchbox";
+
 export default function HomePage() {
   return (
-    <section className="text-center mb-10">
-      <h2 className="text-3xl font-bold text-[#1E88E5] mb-2">
-        Hỗ trợ sinh viên lập kế hoạch học tập thông minh
-      </h2>
-      <p className="text-gray-600 max-w-2xl mx-auto">
-        AI Advisor giúp tra cứu, lập lộ trình học và định hướng nghề nghiệp
-        theo năng lực – công cụ đồng hành dành cho sinh viên đại học.
-      </p>
-    </section>
+    <div className="flex min-h-screen">
+      <Sidebar />
+      <main className="flex-1 flex flex-col items-center justify-center">
+        <h1 className="text-4xl font-semibold mb-8">perplexity</h1>
+        <SearchBox />
+      </main>
+    </div>
   );
 }

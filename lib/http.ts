@@ -1,7 +1,5 @@
 import envConfig from "@/config";
 import { normalizePath } from "@/lib/utils";
-import { LoginResType } from "@/schemaValidation/auth.schema";
-
 import { redirect } from "next/navigation";
 
 type CustomOptions = Omit<RequestInit, "method"> & {
@@ -147,7 +145,7 @@ const request = async <Response>(
         (item) => item === normalizePath(url)
       )
     ) {
-      const { token, expiresAt } = (payload as LoginResType).data;
+      const { token, expiresAt } = data.payload as any;
       localStorage.setItem("sessionToken", token);
       localStorage.setItem("sessionTokenExpiresAt", expiresAt);
     } else if ("auth/logout" === normalizePath(url)) {
