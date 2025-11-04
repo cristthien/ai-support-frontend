@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import GoogleLoginButton from "@/components/auth/GoogleLoginButton";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -73,7 +74,8 @@ export default function LoginPage() {
             className="object-contain"
           />
           <p className="text-sm text-gray-600 mt-2 text-center">
-            Đăng nhập để tiếp tục — lập lộ trình, tra cứu môn học và nhận gợi ý nghề nghiệp.
+            Đăng nhập để tiếp tục — lập lộ trình, tra cứu môn học và nhận gợi ý
+            nghề nghiệp.
           </p>
         </div>
 
@@ -118,7 +120,9 @@ export default function LoginPage() {
                 className="absolute right-2 top-1/2 -translate-y-1/2 text-sm px-2 py-1 rounded focus:outline-none"
                 aria-label={showPassword ? "Ẩn mật khẩu" : "Hiện mật khẩu"}
               >
-                <span className="text-[#1976D2]">{showPassword ? "Ẩn" : "Hiện"}</span>
+                <span className="text-[#1976D2]">
+                  {showPassword ? "Ẩn" : "Hiện"}
+                </span>
               </button>
             </div>
             <div className="flex justify-between items-center mt-2 text-sm">
@@ -132,7 +136,10 @@ export default function LoginPage() {
                 />
                 Ghi nhớ đăng nhập
               </label>
-              <Link href="/forgot" className="text-sm text-[#1976D2] hover:underline">
+              <Link
+                href="/forgot"
+                className="text-sm text-[#1976D2] hover:underline"
+              >
                 Quên mật khẩu?
               </Link>
             </div>
@@ -158,13 +165,7 @@ export default function LoginPage() {
 
         {/* Social / Register */}
         <div className="space-y-3">
-          <button
-            type="button"
-            onClick={() => alert("Demo: đăng nhập Google")}
-            className="w-full rounded-full border border-gray-200 py-2 bg-white text-sm hover:shadow-sm"
-          >
-            Đăng nhập với Google
-          </button>
+          <GoogleLoginButton />
 
           <div className="text-center text-sm text-gray-600">
             Chưa có tài khoản?{" "}
