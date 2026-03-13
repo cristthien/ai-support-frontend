@@ -8,64 +8,64 @@ import { OTPInput } from "@/components/ui/input-otp" // dùng component custom
 const logoSrc = "/4.png"
 
 export default function LoginPage() {
-const [identifier, setIdentifier] = useState("") // email
-const [otpSent, setOtpSent] = useState(false)
-const [otpValue, setOtpValue] = useState("")
-const [error, setError] = useState("")
-const [loading, setLoading] = useState(false)
-const [otpSuccess, setOtpSuccess] = useState(false)
+  const [identifier, setIdentifier] = useState("") // email
+  const [otpSent, setOtpSent] = useState(false)
+  const [otpValue, setOtpValue] = useState("")
+  const [error, setError] = useState("")
+  const [loading, setLoading] = useState(false)
+  const [otpSuccess, setOtpSuccess] = useState(false)
 
-function validateEmail() {
-if (!identifier.trim()) {
-setError("Vui lòng nhập email")
-return false
-}
-if (!/^\S+@\S+.\S+$/.test(identifier)) {
-setError("Email không hợp lệ")
-return false
-}
-setError("")
-return true
-}
+  function validateEmail() {
+    if (!identifier.trim()) {
+      setError("Vui lòng nhập email")
+      return false
+    }
+    if (!/^\S+@\S+.\S+$/.test(identifier)) {
+      setError("Email không hợp lệ")
+      return false
+    }
+    setError("")
+    return true
+  }
 
-async function requestOtp() {
-if (!validateEmail()) return
-setLoading(true)
-setError("")
-try {
-const res = await fetch("/api/v1/auth/otp/request", {
-method: "POST",
-headers: { "Content-Type": "application/json" },
-body: JSON.stringify({ email: identifier }),
-})
-if (!res.ok) {
-const text = await res.text()
-throw new Error("Gửi OTP thất bại: " + text)
-}
-setOtpSent(true)
-} catch (err: any) {
-setError(err.message)
-} finally {
-setLoading(false)
-}
-}
+  async function requestOtp() {
+    if (!validateEmail()) return
+    setLoading(true)
+    setError("")
+    try {
+      const res = await fetch("/api/auth/otp/request", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: identifier }),
+      })
+      if (!res.ok) {
+        const text = await res.text()
+        throw new Error("Gửi OTP thất bại: " + text)
+      }
+      setOtpSent(true)
+    } catch (err: any) {
+      setError(err.message)
+    } finally {
+      setLoading(false)
+    }
+  }
 
-const handleVerify = () => {
-if (otpValue.length < 6) {
-setError("OTP phải đủ 6 ký tự")
-return
-}
-setError("")
-setLoading(true)
-setTimeout(() => {
-setLoading(false)
-setOtpSuccess(true)
-}, 1000)
-}
+  const handleVerify = () => {
+    if (otpValue.length < 6) {
+      setError("OTP phải đủ 6 ký tự")
+      return
+    }
+    setError("")
+    setLoading(true)
+    setTimeout(() => {
+      setLoading(false)
+      setOtpSuccess(true)
+    }, 1000)
+  }
 
-return ( <main className="min-h-screen bg-gray-100 flex items-center justify-center p-6"> <div className="w-full max-w-md bg-white border border-gray-300 rounded-2xl shadow-md p-6">
-{/* Header */} <div className="flex flex-col items-center mb-4"> <div className="flex items-end gap-1"> <Image src={logoSrc} alt="Edu Assistant" width={50} height={50} className="object-contain" /> <h1 className="text-2xl font-bold text-gray-900 italic ml-[-20px] mb-[2px]">EduAssist</h1> </div> <p className="text-sm text-gray-600 mt-2 text-center">
-Đăng nhập để tiếp tục — lập lộ trình, tra cứu môn học và nhận gợi ý nghề nghiệp. </p> </div>
+  return (<main className="min-h-screen bg-gray-100 flex items-center justify-center p-6"> <div className="w-full max-w-md bg-white border border-gray-300 rounded-2xl shadow-md p-6">
+    {/* Header */} <div className="flex flex-col items-center mb-4"> <div className="flex items-end gap-1"> <Image src={logoSrc} alt="Edu Assistant" width={50} height={50} className="object-contain" /> <h1 className="text-2xl font-bold text-gray-900 italic ml-[-20px] mb-[2px]">EduAssist</h1> </div> <p className="text-sm text-gray-600 mt-2 text-center">
+      Đăng nhập để tiếp tục — lập lộ trình, tra cứu môn học và nhận gợi ý nghề nghiệp. </p> </div>
 
     {/* Form */}
     <div className="space-y-4">
@@ -124,7 +124,7 @@ return ( <main className="min-h-screen bg-gray-100 flex items-center justify-cen
       <GoogleLoginButton />
     </div>
   </div>
-</main>
+  </main>
 
-)
+  )
 }

@@ -65,8 +65,8 @@ const request = async <Response>(
     body instanceof FormData
       ? {}
       : {
-          "Content-Type": "application/json",
-        };
+        "Content-Type": "application/json",
+      };
   if (isClient()) {
     const sessionToken = localStorage.getItem("sessionToken");
     if (sessionToken) {
@@ -141,7 +141,7 @@ const request = async <Response>(
   // Đảm bảo logic dưới đây chỉ chạy ở phía client (browser)
   if (isClient()) {
     if (
-      ["auth/login", "auth/register"].some(
+      ["auth/email/verify-otp", "auth/login/google"].some(
         (item) => item === normalizePath(url)
       )
     ) {

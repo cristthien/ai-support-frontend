@@ -1,13 +1,18 @@
+import Link from "next/link";
 import React from "react";
 
-interface NavItemProps {
+export default function NavItem({
+  icon,
+  label,
+  link = "#",
+}: {
   icon: React.ReactNode;
   label: string;
-}
-
-export default function NavItem({ icon, label }: NavItemProps) {
+  link?: string;
+}) {
   return (
-    <button
+    <Link
+      href={link}
       className="
         flex items-center gap-3 w-full px-3 py-2 rounded-md
         hover:bg-accent transition
@@ -23,6 +28,6 @@ export default function NavItem({ icon, label }: NavItemProps) {
       >
         {label}
       </span>
-    </button>
+    </Link>
   );
 }

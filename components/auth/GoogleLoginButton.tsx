@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import http from "@/lib/http";
+import { Button } from "@/components/ui/button";
 
 export default function GoogleLoginButton() {
   const [loading, setLoading] = useState(false);
@@ -16,7 +17,7 @@ export default function GoogleLoginButton() {
       let payload: any = null;
       let lastError: any = null;
 
-      const path = `/api/v1/auth/login/google?redirect_url=${encodeURIComponent(
+      const path = `/api/auth/login/google?redirect_url=${encodeURIComponent(
         redirectUrl
       )}`;
       try {
@@ -33,8 +34,8 @@ export default function GoogleLoginButton() {
       if (!payload) {
         throw new Error(
           lastError?.message ||
-            JSON.stringify(lastError) ||
-            "No response from backend"
+          JSON.stringify(lastError) ||
+          "No response from backend"
         );
       }
 
@@ -55,13 +56,14 @@ export default function GoogleLoginButton() {
   }
 
   return (
-    <button
+    <Button
       type="button"
       onClick={startGoogleLogin}
-      className="w-full rounded-full border border-gray-200 py-2 bg-white text-sm hover:shadow-sm disabled:opacity-60"
+      variant={"default"}
+      className="w-full"
       disabled={loading}
     >
       {loading ? "Đang chuyển hướng..." : "Đăng nhập với Google"}
-    </button>
+    </Button>
   );
 }
